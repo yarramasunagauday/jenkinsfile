@@ -1,0 +1,41 @@
+pipeline
+   {
+agent any 
+    stages
+       {
+        stage('Continous Download')
+            {
+               steps
+               {
+                  
+                   git 'https://github.com/bhargavamin/devops-techtalk.git'
+                   
+                   echo 'VCS job completed'
+               }
+                
+            }
+            stage('Continous Build')
+            {
+               steps
+               {
+                  
+                   sh 'mvn package'
+                   
+                   echo 'Build process completed'
+               }
+                
+            }
+            
+            stage('Continous deployment')
+            {
+               steps
+               {
+                  
+                   deploy adapters: [tomcat9(credentialsId: 'ac3b1a0b-6951-4754-a9c8-3d50faa0f704', path: '', url: 'http://172.31.34.63:8080')], contextPath: 'testapp', war: '**/*.war''
+                   
+                   echo 'Deployment completed'
+               }
+                
+            }
+        }
+    }
